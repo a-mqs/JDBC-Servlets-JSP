@@ -16,8 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class CreateUserServlet
  */
-@WebServlet("/addServlet")
-public class CreateUserServlet extends HttpServlet {
+@WebServlet("/deleteServlet")
+public class DeleteUserServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Connection connection;
 
@@ -28,39 +28,34 @@ public class CreateUserServlet extends HttpServlet {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
+	
 			e.printStackTrace();
 		}
-	}
-	
-	
-	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+				}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		String firstName = request.getParameter("firstName");
-		String lastName = request.getParameter("lastName");
+		System.out.println("doPost()");
 		String email = request.getParameter("email");
-		String password = request.getParameter("password");
 		
 		try {
 			Statement statement = connection.createStatement();
-			int result = statement.executeUpdate("insert into user values('" + firstName + "','" + lastName + "','" + email + "','" + password + "')");
+			int result = statement.executeUpdate("delete from user where email='" + email + "'");
 			PrintWriter out = response.getWriter();
 			
 			if (result > 0) {
-				out.print("<h1>USER CREATED</h1>");
+				out.print("<h1>USER DELETED</h1>");
 				
 			} else {
-				out.print("<h1>ERROR CREATING THE USER</h1>");
+				out.print("<h1>ERROR DELETING THE USER</h1>");
 				
-			}
+			} 
 			
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
-		
-		
-		
+			
 	}
 	
 	public void destroy(){
