@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -17,15 +18,22 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class ReadUsersServlet
  */
-@WebServlet("/readServlet")
+
 public class ReadUsersServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Connection connection;
 
+	@Override
 	public void init() {
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			connection = DriverManager.getConnection("jdbc:mysql://localhost/mydb", "root", "root");
+			
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			
+			String dbUrl = getInitParameter("dbUrl");
+			String dbUser = getInitParameter("dbUser");
+			String dbPassword = getInitParameter("dbPassword");
+						
+			connection = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
@@ -37,7 +45,7 @@ public class ReadUsersServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	
 			System.out.println("teste");
-		
+			
 			try {
 			Statement statement = connection.createStatement();
 			ResultSet resultSet = statement.executeQuery("select * from user");
