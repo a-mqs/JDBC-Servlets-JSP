@@ -6,7 +6,10 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Enumeration;
 
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -21,10 +24,24 @@ public class CreateUserServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Connection connection;
 
-	public void init() {
+	public void init(ServletConfig config) {
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			connection = DriverManager.getConnection("jdbc:mysql://localhost/mydb", "root", "root");
+			ServletContext context = config.getServletContext();
+			System.out.println("init()");
+			Enumeration<String> parameterNames = context.getInitParameterNames();
+
+			while(parameterNames.hasMoreElements()) {
+				String eachName = parameterNames.nextElement();
+				System.out.println("Context param name: " + eachName);
+				System.out.println("Context param value: " + context.getInitParameter(eachName));
+			}
+			
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			
+			connection = DriverManager.getConnection(context.getInitParameter("dbUrl"), 
+					context.getInitParameter("dbUser"), 
+					context.getInitParameter("dbPassword")
+					);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
