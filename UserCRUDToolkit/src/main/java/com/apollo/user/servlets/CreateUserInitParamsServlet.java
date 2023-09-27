@@ -58,7 +58,7 @@ public class CreateUserInitParamsServlet extends HttpServlet {
 				out.print("<h1>USER CREATED</h1>");
 				
 			} else {
-				out.print("<h1>ERROR CREATING THE USER</h1>");
+				out.print("<h1>ERROR CREATING THE USER!!</h1>");
 				
 			}
 			
